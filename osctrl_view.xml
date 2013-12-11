@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- Order Service -->
+		
+		<menuitem name="Order Service" icon="terp-project" id="osctrl_menu"/>
+
+		<record model="ir.ui.view" id="osctrl_tree_view">
+			<field name="name">osctrl.tree</field>
+			<field name="model">osctrl</field>
+			<field name="arch" type="xml">
+				<tree string="Order Service" colors="gray:state in ('done','cancel');black:state not in ('done','cancel');blue:state=='new'">
+					<field name="name"/>
+					<field name="partner_id"/>
+					<field name="in_date"/>
+					<field name="equipment"/>
+					<field name="manufacturer"/>
+					<field name="model"/>
+					<field name="serial"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="osctrl_form_view">
+			<field name="name">osctrl.form</field>
+			<field name="model">osctrl</field>
+			<field name="arch" type="xml">
+				<form string="Order Service" version="7.0">
+					<header>
+						<field name="state" widget="statusbar" statusbar_visible="new,draft,confirmed,wait,done"/>
+					</header>
+					<sheet string="Repairs order">	
+						<h1 class="oe_inline oe_right">
+                        	Ordem Service <field name="name" class="oe_inline"/>
+                    	</h1>
+						<separator/>
+	                    <group>
+	                        <group>
+	                        	<field name="partner_id"/>
+								<field name="equipment"/>
+								<field name="manufacturer"/>
+								<field name="model"/>
+								<field name="serial"/>
+							</group>
+							<group>	
+								<field name="os_mode"/>
+								<field name="user_id"/>
+								<field name="in_date"/>
+								<field name="delivery_date"/>
+								<field name="guarant_days"/>
+							</group>		
+						</group>
+						<group>						
+							<field name="defect"/>
+							<field name="accessories">
+								<form string="Accessories" version="7.0">
+                                 	<group>
+                                 		<field name="name"/>
+                                 		<field name="serial"/>
+      								</group>
+								</form>
+	                            <tree string="Accessories" editable="bottom">
+                             		<field name="name"/>
+                             		<field name="serial"/>
+	                            </tree>
+							</field>
+						</group>
+												
+		                <notebook>
+		                    <page string="Operations">
+								<group>
+									<field name="products">
+										<form string="Products" version="7.0">
+		                                 	<group>
+		                                 		<field name="to_invoice"/>
+		                                 		<field name="product_id" domain="[('type','!=','service')]"/>
+		                                 		<field name="product_uom_qty"/>
+		                                 		<field name="product_uom"/>
+												<field name="price_unit"/>
+												<field name="price_desc"/>
+												<field name="price_subtotal"/>
+		      								</group>
+										</form>
+			                            <tree string="Products" editable="bottom">
+		                                 		<field name="to_invoice"/>
+		                                 		<field name="product_id" domain="[('type','!=','service')]"/>
+												<field name="name"/>                                 		
+		                                 		<field name="product_uom_qty"/>
+		                                 		<field name="product_uom"/>
+												<field name="price_unit"/>
+												<field name="price_desc"/>
+												<field name="price_subtotal"/>
+			                            </tree>
+									</field>
+								</group>
+								
+								<group>
+									
+									<field name="services">
+										<form string="Services" version="7.0">
+		                                 	<group>
+		                                 		<field name="to_invoice"/>
+		                                 		<field name="service_id" domain="[('type','=','service')]"/>
+		                                 		<field name="service_uom_qty"/>
+		                                 		<field name="service_uom"/>
+												<field name="price_unit"/>
+												<field name="price_desc"/>
+												<field name="price_subtotal"/>
+		      								</group>
+										</form>
+			                            <tree string="Services" editable="bottom">
+		                                 		<field name="to_invoice"/>
+		                                 		<field name="service_id" domain="[('type','=','service')]"/>
+												<field name="name"/>                                 		
+		                                 		<field name="service_uom_qty"/>
+		                                 		<field name="service_uom"/>
+												<field name="price_unit"/>
+												<field name="price_desc"/>
+												<field name="price_subtotal"/>
+			                            </tree>
+									</field>
+								</group>
+								<group class="oe_subtotal_footer oe_right">
+									<field name="amount" sum="Amount"/>
+								</group>
+								<div class="oe_clear"/>
+							</page>	
+							<page string="Notes">
+								<field name="notes"/>							
+							</page>
+						</notebook>
+					</sheet>						
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_osctrl_tree">
+			<field name="name">Order Service</field>
+			<field name="res_model">osctrl</field>
+		</record>
+		
+		<menuitem name="Control" parent="osctrl_menu" id="osctrl_sub_menu"/>
+		<menuitem name="Orders" parent="osctrl_sub_menu" id="osctrl_menu_mainform" action="action_osctrl_tree"/>
+
+		<record model="ir.ui.view" id="osctrl_manufacturer_tree_view">
+			<field name="name">osctrl.manufacturer.tree</field>
+			<field name="model">osctrl.manufacturer</field>
+			<field name="arch" type="xml">
+				<tree string="Manufacter">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="osctrl_manufacturer_form_view">
+			<field name="name">osctrl.manufacturer.form</field>
+			<field name="model">osctrl.manufacturer</field>
+			<field name="arch" type="xml">
+				<form string="Order Service" version="7.0">
+					<sheet string="Repairs order">
+						<group>
+							<field name="name"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>					
+						
+		<record model="ir.actions.act_window" id="action_osctrl_manufacturer_tree">
+			<field name="name">Manufacturer</field>
+			<field name="res_model">osctrl.manufacturer</field>
+		</record>
+		
+		<menuitem name="Configuration" parent="osctrl_menu" id="osctrl_conf_menu"/>
+		<menuitem name="Manufacturers" parent="osctrl_conf_menu" id="osctrl_manufacturer_menu_mainform" action="action_osctrl_manufacturer_tree"/>
+		
+		<record model="ir.ui.view" id="osctrl_equipment_tree_view">
+			<field name="name">osctrl.equipment.tree</field>
+			<field name="model">osctrl.equipment</field>
+			<field name="arch" type="xml">
+				<tree string="Equipment">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="osctrl_manufacturer_form_view">
+			<field name="name">osctrl.equipment.form</field>
+			<field name="model">osctrl.equipment</field>
+			<field name="arch" type="xml">
+				<form string="Equipment" version="7.0">
+					<sheet string="Equipments">
+						<group>
+							<field name="name"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>					
+						
+		<record model="ir.actions.act_window" id="action_osctrl_equipment_tree">
+			<field name="name">Equipment</field>
+			<field name="res_model">osctrl.equipment</field>
+		</record>
+
+		<menuitem name="Equipments" parent="osctrl_conf_menu" id="osctrl_equipment_menu_mainform" action="action_osctrl_equipment_tree"/>
+						
+	</data>
+</openerp>
